@@ -4,6 +4,6 @@ A simple subset of std::optional for c++11 and above. It should be mostly compat
 This optional does not have:
 * constexpr support
 * conditionally explicit constructors
-* triviality propagation
+* triviality propagation (except for destructor triviality)
 * relational operators
 * probably something else
