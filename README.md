@@ -1,4 +1,4 @@
-# bareopt
+# bareopt [![Build Status](https://travis-ci.org/bmanga/bareopt.svg?branch=master)](https://travis-ci.org/bmanga/bareopt)
 A simple subset of std::optional for c++11 and above. It should be mostly compatible with std::optional, except for the additional support to optional references.
 
 This optional does not have:
