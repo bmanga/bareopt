@@ -120,10 +120,10 @@ class optional : public detail::optional_base_storage<T>
   using base = detail::optional_base_storage<T>;
   using value_type = typename std::remove_reference<T>::type;
 public:
-  optional()
+  optional() noexcept
   {}
 
-  optional(nullopt_t)
+  optional(nullopt_t) noexcept
   {}
 
   optional(const optional& other)
@@ -133,7 +133,7 @@ public:
   }
 
   template <class = typename std::enable_if<std::is_move_constructible<T>::value>::type>
-  optional(optional&& other)
+  optional(optional&& other) noexcept(std::is_nothrow_move_constructible<T>::value)
   {
     if (other.has_value())
       base::m_inplace_construct(std::move(other).value());

@@ -27,3 +27,32 @@ TEST_CASE("Triviality", "[overhead]") {
   REQUIRE(std::is_trivially_destructible<cm::optional<dummy&>>::value ==
           std::is_trivially_destructible<dummy&>::value);
 }
+
+TEST_CASE("Noexcept", "[overhead") {
+  struct tmc_dummy
+  {
+    tmc_dummy() {};
+    tmc_dummy(tmc_dummy &&) {};
+  };
+
+  struct ntmc_dummy
+  {
+    ntmc_dummy() noexcept = default;
+    ntmc_dummy(tmc_dummy &&) noexcept {};
+  };
+
+  static_assert(!std::is_nothrow_move_constructible<tmc_dummy>::value, "");
+  REQUIRE(std::is_nothrow_move_constructible<cm::optional<tmc_dummy>>::value ==
+          std::is_nothrow_move_constructible<tmc_dummy>::value);
+
+  static_assert(std::is_nothrow_move_constructible<tmc_dummy&>::value, "");
+  REQUIRE(std::is_nothrow_move_constructible<cm::optional<tmc_dummy&>>::value ==
+          std::is_nothrow_move_constructible<tmc_dummy&>::value);
+
+  static_assert(std::is_nothrow_move_constructible<ntmc_dummy>::value, "");
+  REQUIRE(std::is_nothrow_move_constructible<cm::optional<ntmc_dummy>>::value ==
+          std::is_nothrow_move_constructible<ntmc_dummy>::value);
+
+  REQUIRE(std::is_nothrow_move_constructible<cm::optional<ntmc_dummy&>>::value ==
+          std::is_nothrow_move_constructible<ntmc_dummy&>::value);
+}
