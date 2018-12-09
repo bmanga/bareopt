@@ -178,7 +178,7 @@ public:
     base::m_inplace_construct(std::forward<U>(value));
   }
 
-  optional& operator =(nullopt_t)
+  optional& operator =(nullopt_t) noexcept
   {
     base::m_destroy();
   }
@@ -193,6 +193,8 @@ public:
   }
 
   optional& operator=(optional&& other)
+    noexcept(std::is_nothrow_move_assignable<T>::value &&
+             std::is_nothrow_move_constructible<T>::value)
   {
     if (other.has_value())
       base::m_assign_or_construct(std::move(other).value());
