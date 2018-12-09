@@ -42,9 +42,8 @@ namespace cm{
     using constify = typename add_const<T>::type;
 
     template<class T>
-    class optional_base_storage {
+    class optional_base_storage_no_dtor {
     protected:
-      ~optional_base_storage() { m_destroy(); }
       void m_destroy() {
         if (m_is_engaged())
           m_get_value().~T();
@@ -83,6 +82,19 @@ namespace cm{
       typename std::aligned_storage<sizeof(T), alignof(T)>::type m_storage;
       bool m_engaged = false;
     };
+
+    template <class T, bool TriviallyDistructible =
+    std::is_trivially_destructible<T>::value>
+    struct optional_base_storage_with_dtor : optional_base_storage_no_dtor<T>{};
+
+    template <class T>
+    struct optional_base_storage_with_dtor<T, false> : optional_base_storage_no_dtor<T>
+    {
+      using base = optional_base_storage_no_dtor<T>;
+      ~optional_base_storage_with_dtor() { base::m_destroy(); }
+    };
+    template <class T>
+    class optional_base_storage : public optional_base_storage_with_dtor<T> {};
 
     template<class T>
     class optional_base_storage<T &> {

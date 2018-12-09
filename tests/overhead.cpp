@@ -24,8 +24,11 @@ TEST_CASE("Space Overhead", "[overhead]") {
 }
 
 TEST_CASE("Triviality", "[overhead]") {
-  REQUIRE(std::is_trivially_destructible<cm::optional<dummy&>>::value ==
-          std::is_trivially_destructible<dummy&>::value);
+  static_assert(std::is_trivially_destructible<dummy>::value, "");
+  static_assert(std::is_trivially_destructible<dummy&>::value, "");
+
+  REQUIRE(std::is_trivially_destructible<cm::optional<dummy>>::value);
+  REQUIRE(std::is_trivially_destructible<cm::optional<dummy&>>::value);
 }
 
 TEST_CASE("Noexcept", "[overhead") {
