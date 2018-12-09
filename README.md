@@ -7,3 +7,5 @@ This optional does not have:
 * triviality propagation (except for destructor triviality)
 * relational operators
 * probably something else
+
+Some of the tests have been taken from [this optional implementation](https://github.com/TartanLlama/optional), which you should probably be using anyways.
