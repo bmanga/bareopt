@@ -1,0 +1,19 @@
+language: cpp
+compiler:
+  - gcc
+
+addons:
+  apt:
+    packages:
+      - cmake
+before_install:
+  - pip install --user conan
+
+script:
+  - cd tests
+  - mkdir build
+  - cd build
+  - conan install ..
+  - cmake ..
+  - make -j2
+  - ./bin/tests
