@@ -44,6 +44,7 @@ namespace cm{
     template<class T>
     class optional_base_storage {
     protected:
+      ~optional_base_storage() { m_destroy(); }
       void m_destroy() {
         if (m_is_engaged())
           m_get_value().~T();
@@ -233,8 +234,6 @@ public:
     else
       base::m_destroy();
   }
-
-  ~optional() { base::m_destroy(); }
 
   bool has_value() const { return base::m_is_engaged(); }
   explicit operator bool() const { return has_value(); }
