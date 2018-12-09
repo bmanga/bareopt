@@ -237,8 +237,8 @@ public:
       base::m_destroy();
   }
 
-  bool has_value() const { return base::m_is_engaged(); }
-  explicit operator bool() const { return has_value(); }
+  bool has_value() const noexcept { return base::m_is_engaged(); }
+  explicit operator bool() const noexcept { return has_value(); }
 
   value_type& value() & { m_check_access(); return base::m_get_value(); }
   const value_type& value() const & { m_check_access(); return base::m_get_value(); }
