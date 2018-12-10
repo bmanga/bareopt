@@ -68,3 +68,25 @@ TEST_CASE("ValueOr", "[values]") {
   REQUIRE(checker<std::string &, decltype(std::move(osr).value_or(s))>());
   REQUIRE(checker<std::string &, decltype(std::move(osre).value_or(s))>());
 }
+
+TEST_CASE("MoveOnly", "[values]") {
+  struct move_only
+  {
+    move_only() = default;
+    move_only(const move_only &) { copied = true; };
+    move_only(move_only &&) = default;
+    move_only &operator =(const move_only &) { copied = true; };
+    move_only &operator =(move_only &&) = default;
+
+    bool copied = false;
+  };
+
+  cm::optional<move_only> omo;
+  move_only mo;
+  omo = std::move(mo);
+  move_only mo2 = std::move(omo).value();
+  move_only mo3 = std::move(omo).value_or(move_only{});
+  REQUIRE(!mo.copied);
+  REQUIRE(!mo2.copied);
+  REQUIRE(!mo3.copied);
+}
