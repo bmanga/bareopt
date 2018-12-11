@@ -90,3 +90,25 @@ TEST_CASE("MoveOnly", "[values]") {
   REQUIRE(!mo2.copied);
   REQUIRE(!mo3.copied);
 }
+
+TEST_CASE("emplace", "[values]") {
+  struct foo {
+    foo(int x, double y) : x(x), y(y) {}
+    int x;
+    double y;
+  };
+  cm::optional<foo> o;
+  o.emplace(2, 4.4);
+
+  REQUIRE(o.has_value());
+  REQUIRE((*o).x == 2);
+  REQUIRE((*o).y == 4.4);
+
+  cm::optional<foo &> ofr;
+  foo f{8, -8.8};
+  ofr.emplace(f);
+  REQUIRE(ofr.has_value());
+  REQUIRE((*ofr).x == 8);
+  f.y = -1.1;
+  REQUIRE((*ofr).y == -1.1);
+}
