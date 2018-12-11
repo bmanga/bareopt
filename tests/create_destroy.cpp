@@ -26,7 +26,9 @@ TEST_CASE("Matching Ctor-Dtor", "[matching-cdtor]") {
     cm::optional<silly_matcher> om4 {std::move(sm)}; //move ctor
     cm::optional<silly_matcher> om5 = std::move(om2); // move ctor
 
-    REQUIRE(counter  == 1);
+    om5.emplace(); // default ctor
+
+    REQUIRE(counter  == 2);
     REQUIRE(mcounter == 2);
     REQUIRE(ccounter == 3);
   }

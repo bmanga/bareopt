@@ -37,9 +37,9 @@ protected:
     m_engaged = false;
   }
 
-  template <class U> void m_inplace_construct(U &&value) {
+  template <class... Args> void m_inplace_construct(Args &&... args) {
     m_engaged = true;
-    new (&m_storage) T(std::forward<U>(value));
+    new (&m_storage) T(std::forward<Args>(args)...);
   }
 
   template <class U> void m_assign_or_construct(U &&value) {
@@ -228,6 +228,13 @@ public:
   template <class U> T value_or(U &&default_value) && {
     return has_value() ? std::move(*this).base::m_get_value()
                        : static_cast<T>(std::forward<U>(default_value));
+  }
+
+  template <class... Args> value_type &emplace(Args &&... args) {
+    if (has_value()) {
+      base::m_destroy();
+    }
+    base::m_inplace_construct(std::forward<Args>(args)...);
   }
 
 private:
