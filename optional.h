@@ -136,7 +136,7 @@ public:
                 !std::is_convertible<const optional<U> &&, T>::value>::type>
   optional(optional<U> &&other) {
     if (other.has_value())
-      base::m_inplace_construct(std::move(other.value()));
+      base::m_inplace_construct(std::move(other).value());
   }
   template <class U = T, class = typename std::enable_if<
                              std::is_constructible<T, U &&>::value &&
@@ -182,7 +182,7 @@ public:
   }
   template <class U> optional &operator=(optional<U> &&other) {
     if (other.has_value())
-      base::m_assign_or_construct(std::move(other.value()));
+      base::m_assign_or_construct(std::move(other).value());
     else
       base::m_destroy();
   }
