@@ -13,19 +13,23 @@ TEST_CASE("LValues", "[values]") {
   const cm::optional<std::string&> os = s;
   REQUIRE(checker<const std::string&, decltype(os.value())>());
   REQUIRE(checker<const std::string&, decltype(os.operator*())>());
+  REQUIRE(checker<const std::string*, decltype(os.operator->())>());
 
   cm::optional<std::string&> os2 = s;
   REQUIRE(checker<std::string&, decltype(os2.value())>());
   REQUIRE(checker<std::string&, decltype(os2.operator*())>());
+  REQUIRE(checker<std::string*, decltype(os2.operator->())>());
 
 
   const cm::optional<std::string> osc = s;
   REQUIRE(checker<const std::string&, decltype(osc.value())>());
   REQUIRE(checker<const std::string&, decltype(osc.operator*())>());
+  REQUIRE(checker<const std::string*, decltype(osc.operator->())>());
 
   cm::optional<std::string> os2c = s;
   REQUIRE(checker<std::string&, decltype(os2c.value())>());
   REQUIRE(checker<std::string&, decltype(os2c.operator*())>());
+  REQUIRE(checker<std::string*, decltype(os2c.operator->())>());
 }
 
 
@@ -36,19 +40,25 @@ TEST_CASE("RValues", "[values]") {
   const cm::optional<std::string&> os = s;
   REQUIRE(checker<const std::string&, decltype(std::move(os).value())>());
   REQUIRE(checker<const std::string&, decltype(std::move(os).operator*())>());
+  REQUIRE(checker<const std::string*, decltype(std::move(os).operator->())>());
 
   const cm::optional<std::string> osc = s;
   REQUIRE(checker<const std::string&&, decltype(std::move(osc).value())>());
   REQUIRE(checker<const std::string&&, decltype(std::move(osc).operator*())>());
+  REQUIRE(checker<const std::string*, decltype(std::move(osc).operator->())>());
+
 #endif
 
   cm::optional<std::string&> os2 = s;
   REQUIRE(checker<std::string&, decltype(std::move(os2).value())>());
   REQUIRE(checker<std::string&, decltype(std::move(os2).operator*())>());
+  REQUIRE(checker<std::string*, decltype(std::move(os2).operator->())>());
+
 
 
   cm::optional<std::string> os2c = s;
   REQUIRE(checker<std::string&&, decltype(std::move(os2c).value())>());
+  REQUIRE(checker<std::string&&, decltype(std::move(os2c).operator*())>());
   REQUIRE(checker<std::string&&, decltype(std::move(os2c).operator*())>());
 }
 

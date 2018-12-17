@@ -221,6 +221,9 @@ public:
   }
 #endif
 
+  value_type *operator->() { return &value(); }
+  const value_type *operator->() const { return &value(); }
+
   template <class U> T value_or(U &&default_value) const & {
     return has_value() ? base::m_get_value()
                        : static_cast<T>(std::forward<U>(default_value));
