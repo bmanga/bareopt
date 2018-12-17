@@ -11,16 +11,6 @@
 #endif
 
 namespace cm {
-
-static struct nullopt_t {
-} nullopt;
-
-class bad_optional_access : public std::exception {
-public:
-  bad_optional_access() = default;
-  const char *what() const noexcept { return "Optional is empty"; }
-};
-
 namespace detail {
 template <class T> struct add_const { using type = const T; };
 template <class T> struct add_const<const T> { using type = const T; };
@@ -99,6 +89,14 @@ private:
   T *m_storage = nullptr;
 };
 } // namespace detail
+
+static struct nullopt_t {} nullopt;
+
+class bad_optional_access : public std::exception {
+public:
+  bad_optional_access() = default;
+  const char *what() const noexcept { return "Optional is empty"; }
+};
 
 template <class T> class optional : public detail::optional_base_storage<T> {
   using base = detail::optional_base_storage<T>;
